@@ -19,7 +19,6 @@ export default function AllProducts() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // ✅ Fetch products from live backend
   useEffect(() => {
     fetch(`${API_URL}/api/products?populate=*`)
       .then((res) => res.json())
@@ -47,7 +46,6 @@ export default function AllProducts() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ✅ Search filter
   useEffect(() => {
     if (!searchTerm) {
       setFilteredProducts(products);
@@ -62,7 +60,6 @@ export default function AllProducts() {
     }
   }, [searchTerm, products]);
 
-  // ✅ Navbar shrink
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 0;
@@ -73,7 +70,6 @@ export default function AllProducts() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Scroll top visibility
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll);
@@ -207,7 +203,11 @@ export default function AllProducts() {
                 {product.image && (
                   <div className="h-56 w-full flex items-center justify-center bg-white overflow-hidden border-b border-gray-200">
                     <img
-                      src={`${API_URL}${product.image}`}
+                      src={
+                        product.image?.startsWith("http")
+                          ? product.image
+                          : `${API_URL}${product.image}`
+                      }
                       alt={product.name}
                       className="max-w-full max-h-full object-contain"
                     />

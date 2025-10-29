@@ -9,7 +9,6 @@ const API_URL = "https://fusion-it-backend.onrender.com";
 const ProductsSection = () => {
   const [products, setProducts] = useState([]);
 
-  // ✅ Fetch products (price removed)
   useEffect(() => {
     fetch(`${API_URL}/api/products?populate=*`)
       .then((res) => res.json())
@@ -35,13 +34,12 @@ const ProductsSection = () => {
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // ✅ Smooth continuous slider settings
   const settings = {
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 0, // continuous motion
+    autoplaySpeed: 0,
     speed: 9000,
     cssEase: "linear",
     arrows: false,
@@ -71,7 +69,11 @@ const ProductsSection = () => {
                   {product.image && (
                     <div className="w-64 h-64 flex items-center justify-center bg-white rounded-xl mb-4 overflow-hidden border border-gray-200">
                       <img
-                        src={`${API_URL}${product.image}`}
+                        src={
+                          product.image?.startsWith("http")
+                            ? product.image
+                            : `${API_URL}${product.image}`
+                        }
                         alt={product.name}
                         className="max-w-full max-h-full object-contain"
                       />

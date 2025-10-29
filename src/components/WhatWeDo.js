@@ -1,4 +1,3 @@
-// src/components/WhatWeDo.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Slider from "react-slick";
@@ -9,7 +8,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const API_URL = "https://fusion-it-backend.onrender.com/api/features?populate=Image";
 const CATEGORY_ORDER = ["General Services", "Sales", "System Services"];
 
-/* ---------------- CUSTOM ARROWS ---------------- */
 const NextArrow = ({ onClick }) => (
   <button
     onClick={onClick}
@@ -84,7 +82,6 @@ export default function WhatWeDo() {
       className="relative min-h-screen flex flex-col items-center justify-center px-2 py-4 
                  bg-gradient-to-b from-white via-gray-50 to-white text-gray-900"
     >
-      {/* Apply Inter Font Globally */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * {
@@ -97,7 +94,6 @@ export default function WhatWeDo() {
         What We Do
       </h2>
 
-      {/* Category Tabs */}
       <div className="flex flex-wrap justify-center gap-3 mb-6 tracking-tight">
         {CATEGORY_ORDER.map((category) => (
           <button
@@ -114,7 +110,6 @@ export default function WhatWeDo() {
         ))}
       </div>
 
-      {/* Slider */}
       <div className="w-full max-w-7xl relative font-inter">
         {categories[activeTab] && categories[activeTab].length > 0 ? (
           <Slider {...sliderSettings}>
@@ -127,11 +122,16 @@ export default function WhatWeDo() {
                 >
                   {item.Image && (
                     <img
-                      src={`https://fusion-it-backend.onrender.com${
-                        item.Image.formats?.large?.url ||
-                        item.Image.formats?.medium?.url ||
-                        item.Image.url
-                      }`}
+                      src={
+                        item.Image?.url?.startsWith("http")
+                          ? item.Image.url
+                          : `https://fusion-it-backend.onrender.com${
+                              item.Image?.url ||
+                              item.Image?.formats?.medium?.url ||
+                              item.Image?.formats?.large?.url ||
+                              ""
+                            }`
+                      }
                       alt={item.Title}
                       className="w-full h-[260px] md:h-[320px] object-cover rounded-lg mb-4"
                     />
