@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* General smooth scrolling and font */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #D5BCA1, #B4C8E0, #D5BCA1);
+  background-size: 400% 400%;
+  animation: gradientShift 60s ease infinite;
+  color: #0D1B2A;
+}
+
+/* Keep the root clean */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Smooth gradient animation */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === GLOBAL SECTION FIX === */
+/* Applies mocha gradient to all sections except Hero + Footer */
+section:not(#hero):not(footer) {
+  background: linear-gradient(to bottom, #A67B5B, #8BA9C9, #A67B5B);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* Optional subtle divider lines */
+section:not(#hero):not(footer)::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Smooth link transitions */
+a {
+  transition: color 0.3s ease;
+}
+
+/* Buttons hover animation */
+button {
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* Slick carousel arrow color fix */
+.slick-prev:before,
+.slick-next:before {
+  color: #734C36 !important;
+}
+
+/* Translucent white cards */
+.bg-white\/70 {
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.7);
+}
