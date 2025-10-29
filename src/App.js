@@ -128,11 +128,27 @@ function Hero() {
   const heroRef = useRef(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0, scrollY: 0 });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const next = () => {
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+      setAnimating(false);
+    }, 1200);
+  };
+
+  const prev = () => {
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+      setAnimating(false);
+    }, 1200);
+  };
+
   useEffect(() => {
     const interval = setInterval(() => next(), 7000);
     return () => clearInterval(interval);
-  }, [currentSlide]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlide, next]);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -161,22 +177,6 @@ function Hero() {
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
-
-  const next = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-      setAnimating(false);
-    }, 1200);
-  };
-
-  const prev = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-      setAnimating(false);
-    }, 1200);
-  };
 
   const textTransform = `translate3d(${parallax.x}px, ${parallax.y - parallax.scrollY}px, 0)`;
 
