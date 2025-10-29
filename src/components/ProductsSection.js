@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const API_URL = "https://fusion-it-backend.onrender.com";
+
 const ProductsSection = () => {
   const [products, setProducts] = useState([]);
 
   // ✅ Fetch products (price removed)
   useEffect(() => {
-    fetch("http://localhost:1337/api/products?populate=*")
+    fetch(`${API_URL}/api/products?populate=*`)
       .then((res) => res.json())
       .then((data) => {
         if (data && data.data) {
@@ -69,7 +71,7 @@ const ProductsSection = () => {
                   {product.image && (
                     <div className="w-64 h-64 flex items-center justify-center bg-white rounded-xl mb-4 overflow-hidden border border-gray-200">
                       <img
-                        src={`http://localhost:1337${product.image}`}
+                        src={`${API_URL}${product.image}`}
                         alt={product.name}
                         className="max-w-full max-h-full object-contain"
                       />

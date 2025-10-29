@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowUp, Search, ArrowLeft } from "lucide-react";
 import LogoImg from "../assets/logo.png";
 
+const API_URL = "https://fusion-it-backend.onrender.com";
+
 export default function AllProducts() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -10,17 +12,16 @@ export default function AllProducts() {
   const [loading, setLoading] = useState(true);
   const [shrink, setShrink] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showBackButton, setShowBackButton] = useState(true); // ✅ New state for back button
+  const [showBackButton, setShowBackButton] = useState(true);
   const navigate = useNavigate();
 
-  // ✅ Always start from top when page loads
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // ✅ Fetch products
+  // ✅ Fetch products from live backend
   useEffect(() => {
-    fetch("http://localhost:1337/api/products?populate=*")
+    fetch(`${API_URL}/api/products?populate=*`)
       .then((res) => res.json())
       .then((data) => {
         if (data && data.data) {
@@ -46,7 +47,7 @@ export default function AllProducts() {
       .finally(() => setLoading(false));
   }, []);
 
-  // ✅ Filter products by search term
+  // ✅ Search filter
   useEffect(() => {
     if (!searchTerm) {
       setFilteredProducts(products);
@@ -61,18 +62,18 @@ export default function AllProducts() {
     }
   }, [searchTerm, products]);
 
-  // ✅ Hero → Navbar shrink behavior (start immediately)
+  // ✅ Navbar shrink
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 0;
       setShrink(scrolled);
-      setShowBackButton(!scrolled); // ✅ Hide back button when scrolled
+      setShowBackButton(!scrolled);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ✅ Scroll-to-top button visibility
+  // ✅ Scroll top visibility
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll);
@@ -90,10 +91,8 @@ export default function AllProducts() {
 
   return (
     <div className="min-h-screen font-[Inter] text-gray-900 relative">
-      {/* Gradient Background */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#D5BCA1] via-[#B4C8E0] to-[#D5BCA1] bg-[length:400%_400%] animate-[gradientShift_60s_ease_infinite]" />
 
-      {/* ✅ Back Button (top-left, disappears on scroll) */}
       {showBackButton && (
         <button
           onClick={handleBackHome}
@@ -104,7 +103,6 @@ export default function AllProducts() {
         </button>
       )}
 
-      {/* Shrinking Hero / Navbar */}
       <header
         className={`fixed top-0 left-0 w-full z-40 transition-all duration-700 ease-in-out backdrop-blur-md ${
           shrink
@@ -117,7 +115,6 @@ export default function AllProducts() {
             shrink ? "flex-row px-8 text-left" : "flex-col text-center px-6"
           }`}
         >
-          {/* Logo & Text */}
           <div className="flex items-center gap-4">
             <img
               src={LogoImg}
@@ -147,7 +144,6 @@ export default function AllProducts() {
             </div>
           </div>
 
-          {/* Home Button & Search (only when shrunk) */}
           {shrink && (
             <div className="flex items-center gap-4 transition-all duration-700">
               <button
@@ -171,14 +167,12 @@ export default function AllProducts() {
         </div>
       </header>
 
-      {/* Spacer below header */}
       <div
         className={`transition-all duration-500 ${
           shrink ? "h-[90px]" : "h-[300px]"
         }`}
       />
 
-      {/* Search bar (only before shrink) */}
       {!shrink && (
         <div className="relative z-10 max-w-4xl mx-auto mt-10 px-6 transition-all duration-700">
           <div className="flex items-center bg-white/80 backdrop-blur-md shadow-md rounded-full px-4 py-2 border border-gray-200">
@@ -194,7 +188,6 @@ export default function AllProducts() {
         </div>
       )}
 
-      {/* Product Grid */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-8 mt-[20px]">
         {loading ? (
           <div className="flex justify-center items-center py-20 text-gray-600 font-[Inter]">
@@ -214,7 +207,7 @@ export default function AllProducts() {
                 {product.image && (
                   <div className="h-56 w-full flex items-center justify-center bg-white overflow-hidden border-b border-gray-200">
                     <img
-                      src={`http://localhost:1337${product.image}`}
+                      src={`${API_URL}${product.image}`}
                       alt={product.name}
                       className="max-w-full max-h-full object-contain"
                     />
@@ -236,7 +229,6 @@ export default function AllProducts() {
         )}
       </section>
 
-      {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
           onClick={handleScrollTop}
@@ -247,7 +239,6 @@ export default function AllProducts() {
         </button>
       )}
 
-      {/* Gradient Animation */}
       <style>{`
         @keyframes gradientShift {
           0% { background-position: 0% 50%; }

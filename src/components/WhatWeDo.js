@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const API_URL = "http://localhost:1337/api/features?populate=Image";
+const API_URL = "https://fusion-it-backend.onrender.com/api/features?populate=Image";
 const CATEGORY_ORDER = ["General Services", "Sales", "System Services"];
 
 /* ---------------- CUSTOM ARROWS ---------------- */
@@ -127,7 +127,7 @@ export default function WhatWeDo() {
                 >
                   {item.Image && (
                     <img
-                      src={`http://localhost:1337${
+                      src={`https://fusion-it-backend.onrender.com${
                         item.Image.formats?.large?.url ||
                         item.Image.formats?.medium?.url ||
                         item.Image.url
