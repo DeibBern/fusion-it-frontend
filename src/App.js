@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./App.css";
 import LogoImg from "./assets/logo.png";
 import WhatWeDo from "./components/WhatWeDo";
@@ -128,27 +128,27 @@ function Hero() {
   const heroRef = useRef(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0, scrollY: 0 });
 
-  const next = () => {
+  // ✅ Make next stable
+  const next = useCallback(() => {
     setAnimating(true);
     setTimeout(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
       setAnimating(false);
     }, 1200);
-  };
+  }, [slides.length]);
 
-  const prev = () => {
+  const prev = useCallback(() => {
     setAnimating(true);
     setTimeout(() => {
       setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
       setAnimating(false);
     }, 1200);
-  };
+  }, [slides.length]);
 
   useEffect(() => {
     const interval = setInterval(() => next(), 7000);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSlide, next]);
+  }, [next]);
 
   useEffect(() => {
     const hero = heroRef.current;
