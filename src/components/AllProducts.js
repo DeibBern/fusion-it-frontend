@@ -1,9 +1,9 @@
+// src/components/AllProducts.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowUp, Search, ArrowLeft } from "lucide-react";
 import LogoImg from "../assets/logo.png";
-
-const API_URL = "https://fusion-it-backend.onrender.com";
+import { products as localProducts } from "../data/products"; // ✅ local data import
 
 export default function AllProducts() {
   const [products, setProducts] = useState([]);
@@ -15,37 +15,19 @@ export default function AllProducts() {
   const [showBackButton, setShowBackButton] = useState(true);
   const navigate = useNavigate();
 
+  // scroll top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
+  // ✅ use local data instead of backend
   useEffect(() => {
-    fetch(`${API_URL}/api/products?populate=*`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.data) {
-          const formatted = data.data.map((p) => {
-            const attr = p.attributes || p;
-            const img =
-              attr.image?.data?.attributes?.url ||
-              attr.image?.url ||
-              p.image?.url ||
-              null;
-            return {
-              id: p.id,
-              name: attr.name || "Unnamed Product",
-              description: attr.description || "",
-              image: img,
-            };
-          });
-          setProducts(formatted);
-          setFilteredProducts(formatted);
-        }
-      })
-      .catch((err) => console.error("Error fetching products:", err))
-      .finally(() => setLoading(false));
+    setProducts(localProducts);
+    setFilteredProducts(localProducts);
+    setLoading(false);
   }, []);
 
+  // search filter
   useEffect(() => {
     if (!searchTerm) {
       setFilteredProducts(products);
@@ -60,6 +42,7 @@ export default function AllProducts() {
     }
   }, [searchTerm, products]);
 
+  // shrink navbar
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 0;
@@ -70,6 +53,7 @@ export default function AllProducts() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // scroll top visibility
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll);
@@ -203,11 +187,7 @@ export default function AllProducts() {
                 {product.image && (
                   <div className="h-56 w-full flex items-center justify-center bg-white overflow-hidden border-b border-gray-200">
                     <img
-                      src={
-                        product.image?.startsWith("http")
-                          ? product.image
-                          : `${API_URL}${product.image}`
-                      }
+                      src={product.image}
                       alt={product.name}
                       className="max-w-full max-h-full object-contain"
                     />

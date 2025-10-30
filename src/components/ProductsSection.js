@@ -1,37 +1,17 @@
+// src/components/ProductsSection.jsx
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-const API_URL = "https://fusion-it-backend.onrender.com";
+import { products as localProducts } from "../data/products"; // ✅ local data
 
 const ProductsSection = () => {
   const [products, setProducts] = useState([]);
 
+  // ✅ Use local data (no API)
   useEffect(() => {
-    fetch(`${API_URL}/api/products?populate=*`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.data) {
-          const formatted = data.data.map((p) => {
-            const attr = p.attributes || p;
-            const img =
-              attr.image?.data?.attributes?.url ||
-              attr.image?.url ||
-              p.image?.url ||
-              null;
-            return {
-              id: p.id,
-              name: attr.name || "Unnamed Product",
-              description: attr.description || "",
-              image: img,
-            };
-          });
-          setProducts(formatted);
-        }
-      })
-      .catch((err) => console.error("Error fetching products:", err));
+    setProducts(localProducts);
   }, []);
 
   const settings = {
@@ -69,11 +49,7 @@ const ProductsSection = () => {
                   {product.image && (
                     <div className="w-64 h-64 flex items-center justify-center bg-white rounded-xl mb-4 overflow-hidden border border-gray-200">
                       <img
-                        src={
-                          product.image?.startsWith("http")
-                            ? product.image
-                            : `${API_URL}${product.image}`
-                        }
+                        src={product.image}
                         alt={product.name}
                         className="max-w-full max-h-full object-contain"
                       />

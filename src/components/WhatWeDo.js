@@ -1,13 +1,14 @@
+// src/components/WhatWeDo.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { whatWeDo } from "../data/whatWeDo"; // ← now using local data
 
-const API_URL = "https://fusion-it-backend.onrender.com/api/features?populate=Image";
 const CATEGORY_ORDER = ["General Services", "Sales", "System Services"];
 
+/* ---------------- CUSTOM ARROWS ---------------- */
 const NextArrow = ({ onClick }) => (
   <button
     onClick={onClick}
@@ -40,19 +41,9 @@ export default function WhatWeDo() {
   const [activeTab, setActiveTab] = useState("General Services");
 
   useEffect(() => {
-    axios
-      .get(API_URL)
-      .then((res) => {
-        const grouped = res.data.data.reduce((acc, item) => {
-          const category = item.Category || "Uncategorized";
-          if (!acc[category]) acc[category] = [];
-          acc[category].push(item);
-          return acc;
-        }, {});
-        setCategories(grouped);
-      })
-      .catch((err) => console.error("Error fetching features:", err))
-      .finally(() => setLoading(false));
+    // instead of fetching, use local data
+    setCategories(whatWeDo);
+    setLoading(false);
   }, []);
 
   if (loading) return <p className="text-center py-6">Loading...</p>;
@@ -82,6 +73,7 @@ export default function WhatWeDo() {
       className="relative min-h-screen flex flex-col items-center justify-center px-2 py-4 
                  bg-gradient-to-b from-white via-gray-50 to-white text-gray-900"
     >
+      {/* Apply Inter Font Globally */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         * {
@@ -94,6 +86,7 @@ export default function WhatWeDo() {
         What We Do
       </h2>
 
+      {/* Category Tabs */}
       <div className="flex flex-wrap justify-center gap-3 mb-6 tracking-tight">
         {CATEGORY_ORDER.map((category) => (
           <button
@@ -110,6 +103,7 @@ export default function WhatWeDo() {
         ))}
       </div>
 
+      {/* Slider */}
       <div className="w-full max-w-7xl relative font-inter">
         {categories[activeTab] && categories[activeTab].length > 0 ? (
           <Slider {...sliderSettings}>
@@ -121,20 +115,13 @@ export default function WhatWeDo() {
                              leading-snug tracking-tight"
                 >
                   {item.Image && (
-                    <img
-                      src={
-                        item.Image?.url?.startsWith("http")
-                          ? item.Image.url
-                          : `https://fusion-it-backend.onrender.com${
-                              item.Image?.url ||
-                              item.Image?.formats?.medium?.url ||
-                              item.Image?.formats?.large?.url ||
-                              ""
-                            }`
-                      }
-                      alt={item.Title}
-                      className="w-full h-[260px] md:h-[320px] object-cover rounded-lg mb-4"
-                    />
+                    <div className="w-full h-[280px] md:h-[340px] bg-white flex items-center justify-center overflow-hidden rounded-lg mb-4 border border-gray-200">
+                      <img
+                        src={item.Image}
+                        alt={item.Title}
+                        className="object-contain w-full h-full transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
                   )}
                   <h3 className="font-bold text-lg md:text-xl text-gray-900 mb-2 leading-tight tracking-tight">
                     {item.Title}
