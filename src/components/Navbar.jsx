@@ -120,12 +120,12 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col space-y-4">
-          <a
+          <button
             onClick={handleHomeClick}
-            className="cursor-pointer hover:text-blue-400 transition-colors"
+            className="cursor-pointer hover:text-blue-400 transition-colors bg-transparent border-none"
           >
             Home
-          </a>
+          </button>
           <ScrollLink
             to="what-we-do"
             smooth
