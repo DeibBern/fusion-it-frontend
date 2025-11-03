@@ -1,102 +1,17 @@
-// src/App.js
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./App.css";
-import LogoImg from "./assets/logo.png";
 import WhatWeDo from "./components/WhatWeDo";
 import ProductsSection from "./components/ProductsSection";
 import ContactFloater from "./components/ContactFloater";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+import Navbar from "./components/Navbar"; // ✅ use external navbar
+import { Routes, Route } from "react-router-dom";
 import AllProducts from "./components/AllProducts";
 
-// ✅ Hero Images
+// ✅ Hero images
 import HonestImg from "./components/HONEST.png";
 import ReliableImg from "./components/RELIABLE.jpg";
 import AffordableImg from "./components/AFFORDABLE.png";
 import ExpertImg from "./components/EXPERT.jpg";
-
-/* ---------------- NAVBAR ---------------- */
-const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleHomeClick = (e) => {
-    e.preventDefault();
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => scroll.scrollToTop({ duration: 500, smooth: true }), 100);
-    } else {
-      scroll.scrollToTop({ duration: 500, smooth: true });
-    }
-  };
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
-
-  return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? "bg-white shadow-md" : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto flex justify-between items-center px-6 py-4">
-        <div className="flex items-center gap-3">
-          <img src={LogoImg} alt="Fusion I.T. Solutions" className="w-12 h-12 object-contain" />
-          <span className={`font-bold text-xl md:text-2xl ${scrolled ? "text-gray-800" : "text-white"}`}>
-            Fusion I.T. Solutions
-          </span>
-        </div>
-
-        <div className={`hidden md:flex space-x-6 font-medium ${scrolled ? "text-gray-800" : "text-white"}`}>
-          <a
-            href="#hero"
-            onClick={handleHomeClick}
-            className={`cursor-pointer hover:text-blue-500 transition-colors ${
-              scrolled ? "text-gray-800" : "text-white"
-            }`}
-          >
-            Home
-          </a>
-          <ScrollLink
-            to="what-we-do"
-            smooth
-            duration={500}
-            offset={35}
-            className="cursor-pointer hover:text-blue-500 transition-colors"
-          >
-            Services
-          </ScrollLink>
-          <ScrollLink
-            to="products"
-            smooth
-            duration={500}
-            offset={28}
-            className="cursor-pointer hover:text-blue-500 transition-colors"
-          >
-            Products
-          </ScrollLink>
-          <ScrollLink
-            to="about"
-            smooth
-            duration={500}
-            offset={-20}
-            className="cursor-pointer hover:text-blue-500 transition-colors"
-          >
-            About
-          </ScrollLink>
-        </div>
-      </div>
-    </nav>
-  );
-};
 
 /* ---------------- HERO ---------------- */
 function Hero() {
