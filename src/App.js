@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./App.css";
 import WhatWeDo from "./components/WhatWeDo";
 import ProductsSection from "./components/ProductsSection";
+import LogoImg from "./assets/logo.png";
 import ContactFloater from "./components/ContactFloater";
 import Navbar from "./components/Navbar"; // ✅ use external navbar
 import { Routes, Route } from "react-router-dom";
@@ -171,19 +172,42 @@ const SectionWrapper = ({ children, id }) => (
 );
 
 /* ---------------- ABOUT ---------------- */
-const AboutSection = () => (
-  <SectionWrapper id="about">
-    <div className="bg-gray-50 py-20 px-6 md:px-16 text-center">
-      <h2 className="text-4xl font-bold text-gray-800 mb-6 font-[Inter]">About Us</h2>
-      <p className="max-w-3xl mx-auto text-gray-600 text-lg leading-relaxed font-[Inter]">
-        Fusion I.T. Solutions provides complete and innovative IT systems for businesses.  
-        We offer customized services that combine honesty, reliability, affordability,  
-        and expertise — building solutions that drive success.
-      </p>
-    </div>
-  </SectionWrapper>
-);
-
+/* ---------------- ABOUT ---------------- */
+function AboutSection() {
+  return (
+    <SectionWrapper id="about" elevated={true}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="text-center md:text-left">
+          <img src={LogoImg} alt="Fusion I.T. Solutions" className="w-28 mx-auto md:mx-0 mb-6" />
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#734C36] tracking-tight font-[Inter]">
+            Fusion I.T. Solutions
+          </h2>
+          <h3 className="text-2xl md:text-4xl font-bold mt-4 leading-snug text-[#0D1B2A] tracking-tight font-[Inter]">
+            Your #1 Go-To Partner <br /> for All Your IT Needs
+          </h3>
+          <p className="mt-6 text-lg font-medium tracking-tight leading-snug font-[Inter]">
+            Delivering{" "}
+            <span className="text-[#734C36] font-bold">HONEST, RELIABLE, AFFORDABLE</span> and{" "}
+            <span className="text-[#734C36] font-bold">EXPERT</span> solutions across the Philippines.
+          </p>
+        </div>
+        <div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#0D1B2A] tracking-tight font-[Inter]">
+            About Us
+          </h2>
+          <p className="text-lg leading-relaxed mb-4 tracking-tight font-[Inter]">
+            Fusion I.T. Solutions is a premier technology solutions provider based in San Juan, Batangas, Philippines.
+            Our mission is to deliver honest service, reliable solutions, and affordable prices.
+          </p>
+          <p className="text-lg leading-relaxed tracking-tight font-[Inter]">
+            Whether you need software, hardware, networking, security, solar solutions, technical support, or paper
+            products, Fusion I.T. Solutions has the expertise and experience to deliver.
+          </p>
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+}
 /* ---------------- FOOTER ---------------- */
 const Footer = () => (
   <footer className="bg-[#0D1B2A] text-white text-center py-6 font-[Inter]">
