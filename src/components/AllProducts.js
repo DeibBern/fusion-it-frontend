@@ -15,19 +15,16 @@ export default function AllProducts() {
   const [showBackButton, setShowBackButton] = useState(true);
   const navigate = useNavigate();
 
-  // scroll top on mount
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
 
-  // ✅ use local data instead of backend
   useEffect(() => {
     setProducts(localProducts);
     setFilteredProducts(localProducts);
     setLoading(false);
   }, []);
 
-  // search filter
   useEffect(() => {
     if (!searchTerm) {
       setFilteredProducts(products);
@@ -42,7 +39,6 @@ export default function AllProducts() {
     }
   }, [searchTerm, products]);
 
-  // shrink navbar
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 0;
@@ -53,7 +49,6 @@ export default function AllProducts() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // scroll top visibility
   useEffect(() => {
     const handleScroll = () => setShowScrollTop(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll);
@@ -185,11 +180,11 @@ export default function AllProducts() {
                 className="bg-white/80 backdrop-blur-md rounded-2xl shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_10px_25px_rgba(0,0,0,0.25)] transition-transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
               >
                 {product.image && (
-                  <div className="h-56 w-full flex items-center justify-center bg-white overflow-hidden border-b border-gray-200">
+                  <div className="w-full bg-white overflow-hidden border-b border-gray-200 flex items-center justify-center">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="max-w-full max-h-full object-contain"
+                      className="object-contain max-w-full h-56 sm:h-60 md:h-64 lg:h-56 xl:h-56"
                     />
                   </div>
                 )}
@@ -224,6 +219,13 @@ export default function AllProducts() {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
+        }
+
+        @media (max-width: 640px) {
+          img {
+            height: auto !important;
+            max-height: 250px;
+          }
         }
       `}</style>
     </div>

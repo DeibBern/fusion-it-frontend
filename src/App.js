@@ -9,7 +9,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 import AllProducts from "./components/AllProducts";
 
-// ✅ Import hero images
+// ✅ Hero Images
 import HonestImg from "./components/HONEST.png";
 import ReliableImg from "./components/RELIABLE.jpg";
 import AffordableImg from "./components/AFFORDABLE.png";
@@ -55,7 +55,7 @@ const Navbar = () => {
           </span>
         </div>
 
-        <div className={`space-x-6 font-medium ${scrolled ? "text-gray-800" : "text-white"}`}>
+        <div className={`hidden md:flex space-x-6 font-medium ${scrolled ? "text-gray-800" : "text-white"}`}>
           <a
             href="#hero"
             onClick={handleHomeClick}
@@ -128,7 +128,6 @@ function Hero() {
   const heroRef = useRef(null);
   const [parallax, setParallax] = useState({ x: 0, y: 0, scrollY: 0 });
 
-  // ✅ Make next stable
   const next = useCallback(() => {
     setAnimating(true);
     setTimeout(() => {
@@ -181,7 +180,11 @@ function Hero() {
   const textTransform = `translate3d(${parallax.x}px, ${parallax.y - parallax.scrollY}px, 0)`;
 
   return (
-    <section className="relative h-screen w-full overflow-hidden" id="hero" ref={heroRef}>
+    <section
+      className="relative h-[90vh] md:h-screen w-full overflow-hidden flex items-center justify-center"
+      id="hero"
+      ref={heroRef}
+    >
       {[0, 1, 2].map((layer) => (
         <div
           key={layer}
@@ -199,23 +202,19 @@ function Hero() {
         ></div>
       ))}
 
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50 z-5"></div>
 
       <div
-        className={`absolute inset-0 flex flex-col justify-center items-center text-center px-6 z-10 transition-all duration-1000 ${
+        className={`absolute inset-0 flex flex-col justify-center items-center text-center px-4 sm:px-6 z-10 transition-all duration-1000 ${
           animating ? "textOut" : "textIn"
         }`}
-        style={{
-          transform: textTransform,
-          willChange: "transform",
-        }}
+        style={{ transform: textTransform, willChange: "transform" }}
       >
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight font-[Inter] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-3 sm:mb-4 tracking-tight font-[Inter] drop-shadow-[0_4px_15px_rgba(0,0,0,0.9)]">
           {slides[currentSlide].title}
         </h2>
         <p
-          className="text-lg sm:text-xl text-gray-100 max-w-3xl tracking-tight leading-snug font-[Inter]"
+          className="text-base sm:text-lg md:text-xl text-gray-100 max-w-[90%] sm:max-w-3xl tracking-tight leading-snug font-[Inter]"
           style={{
             textShadow:
               "0 2px 5px rgba(0,0,0,0.9), 0 3px 8px rgba(0,0,0,0.8), 1px 1px 3px rgba(0,0,0,0.9)",
@@ -227,13 +226,13 @@ function Hero() {
 
       <button
         onClick={prev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 bg-black/50 text-white text-2xl px-4 py-2 rounded-full hover:bg-black/70 transition z-20"
+        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 bg-black/50 text-white text-lg sm:text-2xl px-3 sm:px-4 py-2 rounded-full hover:bg-black/70 transition z-20"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-6 top-1/2 -translate-y-1/2 bg-black/50 text-white text-2xl px-4 py-2 rounded-full hover:bg-black/70 transition z-20"
+        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 bg-black/50 text-white text-lg sm:text-2xl px-3 sm:px-4 py-2 rounded-full hover:bg-black/70 transition z-20"
       >
         ›
       </button>
@@ -249,112 +248,44 @@ function Hero() {
   );
 }
 
-/* ---------------- SECTION WRAPPER ---------------- */
-const SectionWrapper = ({ id, children, elevated = true, small = false, smallHeight = "90vh" }) => {
-  const isProducts = id === "products";
-  return (
-    <section
-      id={id}
-      className={`relative flex items-center justify-center ${
-        isProducts ? "py-4" : "py-4"
-      } px-6 bg-gradient-to-b from-[#E3F2FD] via-[#BBDEFB] to-[#E3F2FD] ${
-        small ? "" : "min-h-screen"
-      }`}
-      style={small ? { minHeight: smallHeight } : {}}
-    >
-      <div
-        className={`max-w-6xl w-full p-10 transition-all duration-500 ${
-          elevated
-            ? "bg-white/10 backdrop-blur-md rounded-3xl shadow-[0_10px_25px_rgba(0,0,0,0.3)] border border-white/20 hover:scale-[1.02] hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:border-white/30"
-            : ""
-        }`}
-      >
-        {children}
-      </div>
-    </section>
-  );
-};
+/* ---------------- WRAPPER ---------------- */
+const SectionWrapper = ({ children, id }) => (
+  <section id={id} className="relative z-10">
+    {children}
+  </section>
+);
 
 /* ---------------- ABOUT ---------------- */
-function AboutSection() {
-  return (
-    <SectionWrapper id="about" elevated={true}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div className="text-center md:text-left">
-          <img src={LogoImg} alt="Fusion I.T. Solutions" className="w-28 mx-auto md:mx-0 mb-6" />
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[#734C36] tracking-tight font-[Inter]">
-            Fusion I.T. Solutions
-          </h2>
-          <h3 className="text-2xl md:text-4xl font-bold mt-4 leading-snug text-[#0D1B2A] tracking-tight font-[Inter]">
-            Your #1 Go-To Partner <br /> for All Your IT Needs
-          </h3>
-          <p className="mt-6 text-lg font-medium tracking-tight leading-snug font-[Inter]">
-            Delivering{" "}
-            <span className="text-[#734C36] font-bold">HONEST, RELIABLE, AFFORDABLE</span> and{" "}
-            <span className="text-[#734C36] font-bold">EXPERT</span> solutions across the Philippines.
-          </p>
-        </div>
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#0D1B2A] tracking-tight font-[Inter]">
-            About Us
-          </h2>
-          <p className="text-lg leading-relaxed mb-4 tracking-tight font-[Inter]">
-            Fusion I.T. Solutions is a premier technology solutions provider based in San Juan, Batangas, Philippines.
-            Our mission is to deliver honest service, reliable solutions, and affordable prices.
-          </p>
-          <p className="text-lg leading-relaxed tracking-tight font-[Inter]">
-            Whether you need software, hardware, networking, security, solar solutions, technical support, or paper
-            products, Fusion I.T. Solutions has the expertise and experience to deliver.
-          </p>
-        </div>
-      </div>
-    </SectionWrapper>
-  );
-}
+const AboutSection = () => (
+  <SectionWrapper id="about">
+    <div className="bg-gray-50 py-20 px-6 md:px-16 text-center">
+      <h2 className="text-4xl font-bold text-gray-800 mb-6 font-[Inter]">About Us</h2>
+      <p className="max-w-3xl mx-auto text-gray-600 text-lg leading-relaxed font-[Inter]">
+        Fusion I.T. Solutions provides complete and innovative IT systems for businesses.  
+        We offer customized services that combine honesty, reliability, affordability,  
+        and expertise — building solutions that drive success.
+      </p>
+    </div>
+  </SectionWrapper>
+);
 
 /* ---------------- FOOTER ---------------- */
-function Footer() {
-  return (
-    <footer className="bg-[#1a1a1a] text-white py-10">
-      <div className="max-w-6xl mx-auto text-center font-[Inter]">
-        <p className="text-lg font-semibold">Fusion I.T. Solutions</p>
-        <p className="text-gray-400 mt-2">Empowering Businesses through Technology and Innovation.</p>
-        <div className="mt-4 flex justify-center space-x-6 text-sm text-gray-400">
-          <a href="#hero" className="hover:text-blue-400">
-            Home
-          </a>
-          <a href="#what-we-do" className="hover:text-blue-400">
-            Services
-          </a>
-          <a href="#products" className="hover:text-blue-400">
-            Products
-          </a>
-          <a href="#about" className="hover:text-blue-400">
-            About
-          </a>
-        </div>
-        <p className="text-xs text-gray-500 mt-6">
-          © {new Date().getFullYear()} Fusion I.T. Solutions. All rights reserved.
-        </p>
-      </div>
-    </footer>
-  );
-}
+const Footer = () => (
+  <footer className="bg-[#0D1B2A] text-white text-center py-6 font-[Inter]">
+    <p>© {new Date().getFullYear()} Fusion I.T. Solutions. All rights reserved.</p>
+  </footer>
+);
 
-/* ---------------- HOME PAGE ---------------- */
+/* ---------------- HOMEPAGE ---------------- */
 function HomePage() {
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
-
   return (
     <>
       <Navbar />
       <Hero />
-      <SectionWrapper id="what-we-do" elevated={false} small={true} smallHeight="60vh">
+      <SectionWrapper id="what-we-do">
         <WhatWeDo />
       </SectionWrapper>
-      <SectionWrapper id="products" elevated={false}>
+      <SectionWrapper id="products">
         <ProductsSection />
       </SectionWrapper>
       <AboutSection />
@@ -364,40 +295,13 @@ function HomePage() {
   );
 }
 
-/* ---------------- MAIN APP ---------------- */
+/* ---------------- APP ---------------- */
 function App() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, [location.pathname]);
-
   return (
-    <div className="App animate-gradient">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<AllProducts />} />
-      </Routes>
-
-      <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          background: linear-gradient(135deg, #D5BCA1, #B4C8E0, #D5BCA1);
-          background-size: 400% 400%;
-          animation: gradientShift 60s ease infinite;
-        }
-      `}</style>
-    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/products" element={<AllProducts />} />
+    </Routes>
   );
 }
 
