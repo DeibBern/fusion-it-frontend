@@ -172,7 +172,6 @@ const SectionWrapper = ({ children, id }) => (
 );
 
 /* ---------------- ABOUT ---------------- */
-/* ---------------- ABOUT ---------------- */
 function AboutSection() {
   return (
     <SectionWrapper id="about" elevated={true}>
